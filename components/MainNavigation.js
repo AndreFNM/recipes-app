@@ -1,15 +1,12 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import LogoutButton from "./LogoutButton";
 
 function MainNavigation() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        setIsLoggedIn(!!token)
-    },[]);
+    const {isAuthenticated} = useAuth();
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -27,7 +24,7 @@ function MainNavigation() {
                             Home
                         </Link>
                     </li>
-                    {isLoggedIn && (
+                    {isAuthenticated ? (
                         <>
                         <li>
                         <Link href="/favorites" className="text-gray-800 hover:text-blue-500 transition duration-300">
@@ -45,7 +42,10 @@ function MainNavigation() {
                         </Link>
                     </li>
                     </>
-                    )}
+                    )
+                    :
+                    <></>
+                    }
                     <li>
                     <input 
                         type="text"
@@ -53,20 +53,15 @@ function MainNavigation() {
                         className="w-[150px] borderless border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                     />
                     </li>
-                    { !isLoggedIn ? (<li>
+                    { !isAuthenticated ? (<li>
                         <Link href="/auth/login">
                                 Authentication
                             </Link>
                     </li>)
                     :
                     (<li>
-                        <button
-                        onClick={() => {localStorage.removeItem("token");
-                        }}
-                        className="bg-sky-500 text-white px-3 rounded-lg hover:bg-sky-600"
-                        >
-                            Logout
-                        </button>
+                        <LogoutButton />
+
                     </li>)
                     }
                 </ul>
@@ -88,7 +83,9 @@ function MainNavigation() {
                                 Home
                             </Link>
                         </li>
-                        <li>
+                        { isAuthenticated ? (
+                            <>
+                            <li>
                             <Link href="/favorites" className="text-gray-800 hover:text-blue-500 transition duration-300">
                                 Favorites
                             </Link>
@@ -103,6 +100,11 @@ function MainNavigation() {
                                 Profile
                             </Link>
                         </li>
+                        </>)
+                        :
+                        <>
+                        </>
+                        }
                         <li>
                             <input 
                             type="text"
@@ -110,11 +112,18 @@ function MainNavigation() {
                             className="w-[150px] borderless border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                             />
                         </li>
-                        <li>
+                        {isAuthenticated ? (<li>
                             <Link href="/auth/login">
                                 Authentication
                             </Link>
-                        </li>
+                        </li>)
+                        :
+                        (
+                            <li>
+                                <LogoutButton />
+                            </li>
+                        )
+                        }
                     </ul>
                 </div>
             )}

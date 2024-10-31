@@ -26,12 +26,15 @@ export async function POST(req) {
       expiresIn: "1h",
     });
 
-    return new Response(JSON.stringify({ token }), {
+    return new Response(JSON.stringify({ message: "Login Successful" }), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+      headers: {
+        "Set-Cookie": `token=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=3600`,
+      },
+  });
+  
   } catch (error) {
     console.error("Error in login route:", error);
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
+    return new Response("Internal Server Error", {status:500});
   }
 }
