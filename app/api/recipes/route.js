@@ -21,22 +21,20 @@ export async function POST(req) {
     }
 
 
-    const { title, description, category, servings, ingredients, instructions } = await req.json();
+    const { title, description, category, servings, ingredients, instructions, imageUrl } = await req.json();
     
     let conn;
 
     try {
-        console.log('Trying to start the transaction');
         conn = await db.getConnection();
         await conn.beginTransaction();
 
-        console.log('Inserting into recipes table...');
         const [recipeResult] = await conn.query(
-            'INSERT INTO recipes (user_id, title, description, category, servings) VALUES (?, ?, ?, ?, ?)',
-            [userId, title, description, category, servings]
+            'INSERT INTO recipes (user_id, title, description, category, servings, image_url) VALUES (?, ?, ?, ?, ?, ?)',
+            [userId, title, description, category, servings, imageUrl]
         );
         const recipeId = recipeResult.insertId;
-        console.log(`Recipe inserted with success with ID: ${recipeId}`);
+        //console.log(`Recipe inserted with success with ID: ${recipeId}`);
 
         for (let ingredient of ingredients) {
             console.log(`Processing Ingredients: ${ingredient.name}`);
@@ -56,7 +54,6 @@ export async function POST(req) {
                 ingredientId = ingredientResult.insertId;
             }
 
-            console.log(`Acossiating ingredient ID ${ingredientId} with a recipe...`);
             await conn.query(
                 'INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity, unit) VALUES (?, ?, ?, ?)',
                 [recipeId, ingredientId, ingredient.quantity, ingredient.unit]
@@ -71,7 +68,6 @@ export async function POST(req) {
             );
         }
 
-        console.log('Commiting the transaction...');
         await conn.commit();
         conn.release();
 
