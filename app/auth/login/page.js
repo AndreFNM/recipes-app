@@ -62,7 +62,7 @@ export default function LoginPage() {
             <div className="flex items-center justify-between space-x-5">
                 <p>Do you hava an account?</p> 
                 <button onClick={handleSendRegister} className="bg-sky-600 text-white px-4 rounded-lg hover:bg-sky-700 transition-colors"
-                >Login</button>
+                >Register</button>
             </div>
             </div>
     </>

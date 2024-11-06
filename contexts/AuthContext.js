@@ -6,6 +6,7 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userId, setUserId] = useState(null);
 
     const login = async (email, password) => {
         const res = await fetch('/api/auth/login', {
@@ -15,7 +16,7 @@ export function AuthProvider({ children }) {
             credentials: 'include', 
         });
         if (res.ok) {
-            setIsAuthenticated(true);
+            await checkAuth();
             return true; 
         } else {
             return false; 
@@ -26,21 +27,35 @@ export function AuthProvider({ children }) {
     const logout = async () => {
         await fetch('/api/auth/logout', { method: 'GET', credentials: 'include' });
         setIsAuthenticated(false);
+        setUserId(null);
+    };
+
+    const checkAuth = async () => {
+        try {
+            const res = await fetch('/api/auth/check', { credentials: 'include' });
+            if (res.ok) {
+                const data = await res.json();
+                setIsAuthenticated(true);
+                setUserId(data.userId);
+            } else {
+                setIsAuthenticated(false);
+                setUserId(null);
+            }
+        } catch (error) {
+            console.error("Error checking auth status:", error);
+            setIsAuthenticated(false);
+            setUserId(null);
+        }
     };
     
 
     useEffect(() => {
-        const checkAuth = async () => {
-            const res = await fetch('/api/auth/check', { credentials: 'include' });
-            console.log("Auth check:", res.ok); 
-            setIsAuthenticated(res.ok);
-        };
         checkAuth();
     }, []);
     
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, login, logout, userId }}>
             {children}
         </AuthContext.Provider>
     );

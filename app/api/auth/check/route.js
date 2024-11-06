@@ -23,7 +23,7 @@ export async function GET(req) {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         console.log("Token decoded successfully:", decoded);
 
-        return new Response(JSON.stringify({ authenticated: true }), {
+        return new Response(JSON.stringify({ authenticated: true, userId: decoded.id }), {
             status: 200,
             headers: { "Content-Type": "application/json" },
         });
