@@ -74,3 +74,73 @@ export async function DELETE(request) {
         });
     }
 }
+
+export async function GET(request) {
+    const cookieHeader = request.headers.get("cookie");
+    const token = cookieHeader
+        ? cookieHeader.split("; ").find((c) => c.startsWith("token="))?.split("=")[1]
+        : null;
+
+    if (!token) {
+        return new Response(JSON.stringify({ error: "Unauthorized - No token provided" }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+
+    let userId;
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        userId = decoded.id;
+    } catch (error) {
+        return new Response(JSON.stringify({ error: "Invalid or expired token" }), {
+            status: 403,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const recipeId = searchParams.get("id");
+
+    try {
+        if (recipeId) {
+            
+            const [recipeResult] = await db.query('SELECT * FROM recipes WHERE id=? AND user_id=?', [recipeId, userId]);
+            if (recipeResult.length === 0) {
+                return new Response(JSON.stringify({ error: "Recipe not found" }), { status: 404 });
+            }
+
+            const recipe = recipeResult[0];
+
+            return new Response(JSON.stringify({ 
+                ...recipe, 
+            }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        } else {
+            const [recipes] = await db.query(`SELECT 
+                                                r.id AS recipe_id,
+                                                r.title,
+                                                r.description,
+                                                r.category,
+                                                r.image_url
+                                            FROM 
+                                                favorites f
+                                            JOIN 
+                                                recipes r ON f.recipe_id = r.id
+                                            WHERE 
+                                                f.user_id = ?`, [userId]);
+            return new Response(JSON.stringify(recipes), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
+    } catch (error) {
+        console.error("Error fetching recipes", error);
+        return new Response(JSON.stringify({ error: "Error fetching recipes" }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+}
