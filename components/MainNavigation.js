@@ -3,14 +3,24 @@ import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import LogoutButton from "./LogoutButton";
+import { useRouter } from "next/navigation";
 
 function MainNavigation() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const {isAuthenticated} = useAuth();
+    const [searchTerm, setSearchTerm] = useState("");
+    const router = useRouter();
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+
+    const handleSearch = (e) => {
+        if (e.key === "Enter" && searchTerm) {
+            router.push(`/searchResults?searchTerm=${encodeURIComponent(searchTerm)}`);
+        }
+    };
+    
 
     return(
         <header className="bg-white bg-opacity-70 backdrop-blur-md shadow-md fixed w-full top-0 z-10">
@@ -50,6 +60,8 @@ function MainNavigation() {
                     <input 
                         type="text"
                         placeholder="Search..."
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyDown={handleSearch}
                         className="w-[150px] borderless border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                     />
                     </li>
@@ -109,6 +121,8 @@ function MainNavigation() {
                             <input 
                             type="text"
                             placeholder="Search..."
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onKeyDown={handleSearch}
                             className="w-[150px] borderless border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                             />
                         </li>

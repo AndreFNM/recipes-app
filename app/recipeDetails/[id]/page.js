@@ -1,13 +1,19 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 import { use } from "react";
 
 export default function RecipeDetails({ params }) {
   const resolvedParams = use(params);
   const { id } = resolvedParams;
 
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
   const [recipe, setRecipe] = useState(null);
   const [error, setError] = useState(null);
+  const [isFavorited, setIsFavorited] = useState(false);
 
   useEffect(() => {
     const fetchRecipeDetails = async () => {
@@ -21,15 +27,64 @@ export default function RecipeDetails({ params }) {
       }
     };
 
+    const checkIfFavorited = async () => {
+      if (!isAuthenticated) return; 
+      try {
+          const response = await fetch(`/api/favorites/check?recipeId=${id}`, {
+              credentials: "include",
+          });
+          if (response.ok) {
+              const data = await response.json();
+              setIsFavorited(data.isFavorited); 
+          }
+      } catch (error) {
+          console.error("Error checking favorite status:", error);
+      }
+  };
+  
+
     fetchRecipeDetails();
-  }, [id]);
+    checkIfFavorited();
+  }, [id, isAuthenticated]);
+
+  const toggleFavorite = async () => {
+    if (!isAuthenticated) {
+      router.push("/auth/login");
+      return;
+    }
+
+    try {
+      const method = isFavorited ? "DELETE" : "POST";
+      const response = await fetch("/api/favorites", {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ recipeId: id }),
+      });
+
+      if (!response.ok) throw new Error(`Error ${isFavorited ? "removing from" : "adding to"} favorites`);
+
+      setIsFavorited(!isFavorited);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   if (error) return <p>Error: {error}</p>;
   if (!recipe) return <p>Loading...</p>;
 
   return (
     <div className="p-4 sm:p-8 max-w-4xl mx-auto mt-16">
-      <h1 className="text-3xl font-bold mb-4">{recipe.title}</h1>
+      <div className="flex">
+        <h1 className="text-3xl font-bold mb-4">{recipe.title}</h1>
+        <button
+          onClick={toggleFavorite}
+          className={`px-4 py-2 mb-6 ml-6 text-sm ${isFavorited ? "text-red-600 bg-red-100 hover:bg-red-200" : "text-blue-600 bg-blue-100 hover:bg-blue-200"} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+        >
+          {isFavorited ? "Remove from Favorites" : "Add to Favorites"}
+        </button>
+      </div>
       <img
         src={recipe.image_url}
         alt={recipe.title}
