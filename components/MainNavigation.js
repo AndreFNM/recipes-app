@@ -126,18 +126,17 @@ function MainNavigation() {
                             className="w-[150px] borderless border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
                             />
                         </li>
-                        {isAuthenticated ? (<li>
-                            <Link href="/auth/login">
+                        { !isAuthenticated ? (<li>
+                        <Link href="/auth/login">
                                 Authentication
                             </Link>
-                        </li>)
-                        :
-                        (
-                            <li>
-                                <LogoutButton />
-                            </li>
-                        )
-                        }
+                    </li>)
+                    :
+                    (<li>
+                        <LogoutButton />
+
+                    </li>)
+                    }
                     </ul>
                 </div>
             )}

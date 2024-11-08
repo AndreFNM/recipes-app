@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { use } from "react";
+import Image from "next/image";
 
 export default function RecipeDetails({ params }) {
   const resolvedParams = use(params);
@@ -85,11 +86,21 @@ export default function RecipeDetails({ params }) {
           {isFavorited ? "Remove from Favorites" : "Add to Favorites"}
         </button>
       </div>
-      <img
+      {/* <img
         src={recipe.image_url}
         alt={recipe.title}
         className="w-full h-80 object-cover rounded-lg mb-4"
-      />
+      /> */}
+      <div className="w-full h-80 relative mb-4">
+          <Image
+              src={recipe.image_url}
+              alt={recipe.title}
+              layout="fill"         
+              objectFit="cover"     
+              className="rounded-lg"
+          />
+      </div>
+
       <p><strong>Category:</strong> {recipe.category}</p>
       <p><strong>Servings:</strong> {recipe.servings}</p>
       <p className="mt-4"><strong>Description:</strong> {recipe.description}</p>

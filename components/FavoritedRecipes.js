@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import Image from "next/image";
 
 export default function FavoritedRecipes() {
     const { isAuthenticated, userId } = useAuth();
@@ -43,13 +44,23 @@ export default function FavoritedRecipes() {
                 <ul>
                     {recipes.map((recipe) => (
                         <li key={recipe.recipe_id} className="flex flex-col sm:flex-row items-center p-4 bg-gray-300 text-white rounded-lg shadow-lg mb-4 w-full max-w-md sm:max-w-full transform hover:scale-105 transition-transform duration-300 ease-in-out">
-                            <div className="w-32 h-32 sm:w-20 sm:h-20 mr-0 sm:mr-4 mb-4 sm:mb-0">
+                            {/* <div className="w-32 h-32 sm:w-20 sm:h-20 mr-0 sm:mr-4 mb-4 sm:mb-0">
                                 <img
                                     src={recipe.image_url}
                                     alt="Recipe"
                                     className="w-full h-full object-cover rounded-lg"
                                 />
+                            </div> */}
+                            <div className="w-32 h-32 sm:w-20 sm:h-20 mr-0 sm:mr-4 mb-4 sm:mb-0 relative">
+                                <Image
+                                    src={recipe.image_url}
+                                    alt="Recipe"
+                                    layout="fill"
+                                    objectFit="cover"
+                                    className="rounded-lg"
+                                />
                             </div>
+
                             <div className="flex-1 ml-5">
                                 <h3 className="text-md sm:text-lg font-semibold text-gray-600">{recipe.title}</h3>
                             </div>
