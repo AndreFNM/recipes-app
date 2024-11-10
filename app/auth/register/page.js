@@ -8,23 +8,38 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [error, setError] = useState('');
   const router = useRouter();
   const {isAuthenticated} = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
+    if(!name || !email || !password){
+      setError('Please fill all field.');
+      return;
+    }
+
+    try{
     const res = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password }),
     });
 
+    const data = await res.json();
+
     if (res.ok) {
       router.push("/auth/login");
     } else {
-      console.log("Registration Failed");
+      setError(data.error);
     }
+  } catch (error){
+    console.error('Registration error.', error);
+    setError('An unexpexted error occurred. Please try again.');
+    
+  }
   };
 
   function handleSendLogin() {
@@ -46,23 +61,35 @@ export default function RegisterPage() {
     <>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col items-center justify-between space-y-5">
+        {error && (
+                  <p className="text-red-500 text-sm text-center">{error}</p>
+                )}
           <input 
           type="text" 
           placeholder="Name" 
           value={name} 
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value)
+            setError('');
+            }}
           className="border-b border-gray-900 p-2 w-full text-lg bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none  focus:ring-sky-500 rounded-md"
           />
           <input 
           type="email" 
           placeholder="Email" 
-          value={email} onChange={(e) => setEmail(e.target.value)}
+          value={email} onChange={(e) => {
+            setEmail(e.target.value)
+            setError('');
+            }}
           className="border-b border-gray-900 p-2 w-full text-lg bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none  focus:ring-sky-500 rounded-md"
           />
           <input 
           type="password" 
           placeholder="Password" 
-          value={password} onChange={(e) => setPassword(e.target.value)}
+          value={password} onChange={(e) => {
+            setPassword(e.target.value)
+            setError('');
+            }}
           className="border-b border-gray-900 p-2 w-full text-lg bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none  focus:ring-sky-500 rounded-md"
           />
           <button 

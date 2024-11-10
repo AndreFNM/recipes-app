@@ -2,7 +2,7 @@ import db from '@/lib/db';
 
 export async function GET() {
   try {
-    const [recipes] = await db.query('SELECT id, title, image_url FROM recipes');
+    const [recipes] = await db.query('SELECT id, title, image_url, favorite_count FROM recipes');
     return new Response(JSON.stringify(recipes), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },

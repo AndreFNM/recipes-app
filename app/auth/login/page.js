@@ -9,17 +9,31 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+
+    if(!email || !password) {
+      setError('Please enter both email and passoword');
+      return;
+    }
+
+    try{
+
     const success = await login(email, password);
     console.log("Login success:", success); 
     if (success) {
       router.push("/");
     } else {
-      console.error("Login failed");
+      setError('Login Failed. Please check your credentials and try again.', error);
     }
-  };
+  }catch (error){
+    console.error('Login error', error);
+    setError('An unexpected error occurred. Please try again later.');
+  }
+};
 
   function handleSendRegister() {
     router.push("/auth/register");
@@ -40,16 +54,25 @@ export default function LoginPage() {
     <>
     <form onSubmit={handleSubmit}>
         <div className="flex flex-col items-center justify-between space-y-5">
+        {error && (
+          <p className="text-red-500 text-sm text-center">{error}</p>
+        )}
           <input 
           type="email" 
           placeholder="Email" 
-          value={email} onChange={(e) => setEmail(e.target.value)}
+          value={email} onChange={(e) => {
+            setEmail(e.target.value)
+            setError('');
+            }}
           className="border-b border-gray-900 p-2 w-full text-lg bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none  focus:ring-sky-500 rounded-md"
           />
           <input 
           type="password" 
           placeholder="Password" 
-          value={password} onChange={(e) => setPassword(e.target.value)}
+          value={password} onChange={(e) => {
+            setPassword(e.target.value)
+            setError('');
+            }}
           className="border-b border-gray-900 p-2 w-full text-lg bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none  focus:ring-sky-500 rounded-md"
           />
           <button 

@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 export async function POST(req, res) {
   const { name, email, password } = await req.json();
 
-  if (!email || !email.includes("@") || !password || password.length < 8) {
+  if (!email || !email.includes("@") || !password) {
     return new Response(JSON.stringify({ error: "Invalid input" }), { status: 422 });
   }
 
