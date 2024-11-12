@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import LogoutButton from "@/components/LogoutButton";
+import LoginRegisterInput from "@/components/LoginRegisterInput";
 
 export default function LoginPage() {
   const {isAuthenticated, login } = useAuth();
@@ -57,24 +58,24 @@ export default function LoginPage() {
         {error && (
           <p className="text-red-500 text-sm text-center">{error}</p>
         )}
-          <input 
-          type="email" 
-          placeholder="Email" 
-          value={email} onChange={(e) => {
-            setEmail(e.target.value)
-            setError('');
-            }}
-          className="border-b border-gray-900 p-2 w-full text-lg bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none  focus:ring-sky-500 rounded-md"
-          />
-          <input 
-          type="password" 
-          placeholder="Password" 
-          value={password} onChange={(e) => {
-            setPassword(e.target.value)
-            setError('');
-            }}
-          className="border-b border-gray-900 p-2 w-full text-lg bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none  focus:ring-sky-500 rounded-md"
-          />
+        <LoginRegisterInput
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => {
+          setEmail(e.target.value);
+          setError('');
+        }}
+         />
+    
+          <LoginRegisterInput
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => {
+          setPassword(e.target.value);
+          setError('');
+        }} />
           <button 
           type="submit"
           className="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700"

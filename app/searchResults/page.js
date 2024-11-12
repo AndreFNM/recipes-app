@@ -35,20 +35,19 @@ function SearchResultsPage() {
             {recipes.length > 0 ? (
                 <>
                 <div className="flex items-center justify-center mt-24">
-    <h1 className="text-3xl sm:text-xl md:text-2xl lg:text-3xl font-bold">Results for: &quot;{searchTerm}&quot;</h1>
-    </div>
+                    <h1 className="text-3xl sm:text-xl md:text-2xl lg:text-3xl font-bold">Results for: &quot;{searchTerm}&quot;</h1>
+                    </div>
 
-    <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 lg:gap-8 mt-8">
-    {recipes.map((recipe) => (
-      <RecipeCard key={recipe.id} title={recipe.title} image={recipe.image_url} path={recipe.id} />
-    ))}
-
-    </div>
+                    <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 lg:gap-8 mt-8">
+                    {recipes.map((recipe) => (
+                    <RecipeCard key={recipe.id} title={recipe.title} image={recipe.image_url} path={recipe.id} />
+                    ))}
+                </div>
                 </>
-            ) : (
+                ) : (
                 <p>No recipes found for &quot;{searchTerm}&quot;.</p>
-            )}
-     </>
+                )}
+        </>
     );
 }
 

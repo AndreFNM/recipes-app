@@ -12,13 +12,6 @@ export default function RecipeCard({title, image, path}) {
         
         <div className="w-full sm:w-1/4 md:w-1/5 lg:w-1/6 p-2 transform hover:scale-105 transition-transform duration-300 ease-in-out">
             <div className="rounded overflow-hidden shadow-lg bg-gray-300 h-full flex flex-col ">
-            {/* <div className="flex-shrink-0">
-                <img 
-                className="w-full h-40 object-cover " 
-                src={image} 
-                alt={title}
-                 /> 
-                 </div> */}
                  <div className="w-full h-40 relative"> 
                     <Image
                         src={image} 

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import LogoutButton from "@/components/LogoutButton";
+import LoginRegisterInput from "@/components/LoginRegisterInput";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -64,39 +65,38 @@ export default function RegisterPage() {
         {error && (
                   <p className="text-red-500 text-sm text-center">{error}</p>
                 )}
-          <input 
-          type="text" 
-          placeholder="Name" 
-          value={name} 
+            <LoginRegisterInput
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+              setError('');
+             }} />
+    
+            <LoginRegisterInput
+          type="email"
+          placeholder="Email"
+          value={email}
           onChange={(e) => {
-            setName(e.target.value)
+            setEmail(e.target.value);
             setError('');
-            }}
-          className="border-b border-gray-900 p-2 w-full text-lg bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none  focus:ring-sky-500 rounded-md"
+          }}
           />
-          <input 
-          type="email" 
-          placeholder="Email" 
-          value={email} onChange={(e) => {
-            setEmail(e.target.value)
+      
+            <LoginRegisterInput
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
             setError('');
-            }}
-          className="border-b border-gray-900 p-2 w-full text-lg bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none  focus:ring-sky-500 rounded-md"
-          />
-          <input 
-          type="password" 
-          placeholder="Password" 
-          value={password} onChange={(e) => {
-            setPassword(e.target.value)
-            setError('');
-            }}
-          className="border-b border-gray-900 p-2 w-full text-lg bg-transparent text-gray-700 placeholder-gray-400 focus:outline-none  focus:ring-sky-500 rounded-md"
-          />
-          <button 
-          type="submit"
-          className="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700"
-          >
-          Register</button>
+          }} />
+            <button 
+            type="submit"
+            className="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700"
+            >
+            Register</button>
         </div>
     </form>
     

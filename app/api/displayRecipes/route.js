@@ -1,17 +1,20 @@
 import db from '@/lib/db';
 
+async function fetchRecipes() {
+  const [recipes] = await db.query('SELECT id, title, image_url, favorite_count FROM recipes');
+  return recipes;
+}
+
+function createResponse(body, status, headers = { 'Content-Type': 'application/json' }) {
+  return new Response(JSON.stringify(body), { status, headers });
+}
+
 export async function GET() {
   try {
-    const [recipes] = await db.query('SELECT id, title, image_url, favorite_count FROM recipes');
-    return new Response(JSON.stringify(recipes), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const recipes = await fetchRecipes();
+    return createResponse(recipes, 200);
   } catch (error) {
     console.error("Error searching for recipes", error);
-    return new Response(JSON.stringify({ error: "Error searching for recipes" }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return createResponse({ error: "Error searching for recipes" }, 500);
   }
 }
