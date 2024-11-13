@@ -19,11 +19,16 @@ export default function RecipeCard({title, image, path}) {
                         layout="fill"  
                         objectFit="cover"
                         className="object-cover"
+                        onClick={handleBtn}
                     />
                 </div>
 
                 <div className="px-6 py-4 flex flex-col flex-grow justify-between h-full">
-                    <div className="font-bold text-xl sm:text-base md:text-lg lg:text-xl mb-2 line-clamp-1">{title}</div>
+                    <div className="font-bold text-xl sm:text-base md:text-lg lg:text-xl mb-2 line-clamp-1">
+                    <button onClick={handleBtn}>
+                    {title}
+                    </button>
+                    </div>
                     <button onClick={handleBtn}>
                     <div className="px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-600 mt-auto">
                             View Recipe

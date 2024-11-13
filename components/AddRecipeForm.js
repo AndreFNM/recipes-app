@@ -20,27 +20,20 @@ export default function AddRecipeForm() {
     const [imageUrl, setImageUrl] = useState('');
     const [error, setError] = useState(null);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const recipeData = createRecipeData();
-            await submitRecipe(recipeData);
-            resetForm();
-            router.push("/myRecipes");
-        } catch (error) {
-            setError(error.message);
-        }
-    };
+    const validateRecipeData = () => {
+        const errors = [];
 
-    const createRecipeData = () => ({
-        title,
-        description,
-        category,
-        servings,
-        ingredients,
-        instructions,
-        imageUrl,
-    });
+        const ingredientNames = ingredients.map((ingredient) => ingredient.name.trim().toLowerCase());
+        const hasDuplicates = new Set(ingredientNames).size !== ingredientNames.length;
+        if (hasDuplicates) errors.push("Each ingredient must be different.");
+
+        if (!category) errors.push("Please select a category.");
+
+        const maxServings = 9999;
+        if (servings > maxServings) errors.push(`Servings cannot exceed ${maxServings}.`);
+
+        return errors;
+    };
 
     const submitRecipe = async (recipeData) => {
         const response = await fetch('/api/recipes', {
@@ -52,6 +45,33 @@ export default function AddRecipeForm() {
         if (!response.ok) throw new Error('Failed to add recipe');
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const errors = validateRecipeData();
+        if (errors.length > 0) {
+            setError(errors[0]); 
+            return;
+        }
+
+        try {
+            const recipeData = {
+                title,
+                description,
+                category,
+                servings,
+                ingredients,
+                instructions,
+                imageUrl,
+            };
+            await submitRecipe(recipeData);
+            resetForm();
+            router.push("/myRecipes");
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
     const resetForm = () => {
         setTitle('');
         setDescription('');
@@ -60,6 +80,7 @@ export default function AddRecipeForm() {
         setIngredients([{ name: '', quantity: '', unit: '' }]);
         setInstructions(['']);
         setImageUrl('');
+        setError(null);
     };
 
     const addIngredient = () => setIngredients([...ingredients, { name: '', quantity: '', unit: '' }]);
@@ -102,15 +123,10 @@ export default function AddRecipeForm() {
             <ImageUpload setImageUrl={setImageUrl} />
 
             {error && <p className="text-red-500">{error}</p>}
-            <button
-                type="submit"
-                className="w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-                Add Recipe
-            </button>
+            <button 
+            onClick={handleSubmit}
+            className="w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >Add Recipe</button>
         </div>
     );
 }
-
-
-

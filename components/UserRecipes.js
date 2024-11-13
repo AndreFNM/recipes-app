@@ -11,6 +11,7 @@ export default function UserRecipes() {
     const [recipeToDelete, setRecipeToDelete] = useState(null);
     const [error, setError] = useState(null);
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchRecipes = async () => {
         try {
@@ -21,6 +22,8 @@ export default function UserRecipes() {
         } catch (error) {
             console.error(error);
             setError("Failed to fetch recipes");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -61,7 +64,13 @@ export default function UserRecipes() {
     };
 
     return (
-        <div className="p-2 sm:p-4 w-full max-w-4xl mx-auto">
+    <>
+        {isLoading ? 
+            <div className="text-center">
+                <p>Loading...</p>
+            </div>
+        :
+            <div className="p-2 sm:p-4 w-full max-w-4xl mx-auto">
             {error && <p className="text-red-500">{error}</p>}
             {recipes.length > 0 ? (
                 <ul>
@@ -80,7 +89,7 @@ export default function UserRecipes() {
                                 />
                             </div>
 
-                            <div className="flex flex-col sm:flex-1 text-center sm:text-left items-center sm:items-start">
+                            <div className="flex flex-col sm:flex-1 text-center sm:text-left items-center sm:ml-5 sm:items-start">
                                 <h3 className="text-md sm:text-lg font-semibold text-gray-600">{recipe.title}</h3>
                                 <h3 className="text-sm sm:text-base text-gray-600">{recipe.category}</h3>
                             </div>
@@ -103,7 +112,7 @@ export default function UserRecipes() {
                     ))}
                 </ul>
             ) : (
-                <div className="p-4 sm:p-8 items-center justify-center w-full max-w-4xl mx-auto">
+                <div className="p-4 sm:p-8 items-center justify-center w-full max-w-4xl mx-auto text-center">
                     <p>You don&apos;t have any recipes</p>
                 </div>
             )}
@@ -113,6 +122,7 @@ export default function UserRecipes() {
                 onClose={closeDeleteModal}
                 onConfirm={confirmDelete}
             />
-        </div>
+        </div>}
+        </>
     );
 }

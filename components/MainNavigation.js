@@ -16,10 +16,18 @@ function MainNavigation() {
     };
 
     const handleSearch = (e) => {
-        if (e.key === "Enter" && searchTerm) {
-            router.push(`/searchResults?searchTerm=${encodeURIComponent(searchTerm)}`);
+        if (e.key === "Enter") {
+            const trimmedSearchTerm = searchTerm.trim();
+    
+            if (trimmedSearchTerm === "") {
+                router.push("/");
+            } else {
+                router.push(`/searchResults?searchTerm=${encodeURIComponent(trimmedSearchTerm)}`);
+            }
+            setSearchTerm("");
         }
     };
+    
     
 
     return(

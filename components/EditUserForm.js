@@ -1,13 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import ImageUpload from "./ImageUpload";
-import Image from 'next/image';
 
 export default function EditUserForm() {
     const [user, setUser] = useState({});
     const [name, setName] = useState('');
-    const [imageUrl, setImageUrl] = useState('');
     const [error, setError] = useState(null);
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -22,7 +19,6 @@ export default function EditUserForm() {
                 const data = await response.json();
                 setUser(data);
                 setName(data.name);
-                setImageUrl(data.image);
                 setError(null);
             } catch (error) {
                 console.error("Error fetching user data:", error);
@@ -38,7 +34,6 @@ export default function EditUserForm() {
 
         const formData = new FormData();
         formData.append("name", name);
-        if (imageUrl) formData.append("image", imageUrl);
 
         try {
             const response = await fetch("/api/profile", {
@@ -97,15 +92,6 @@ export default function EditUserForm() {
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="flex flex-col items-center space-y-4">
-                {user.image && (
-                    <Image
-                        src={user.image}
-                        alt={user.name}
-                        width={64}
-                        height={64}
-                        className="rounded-full border-4 border-blue-500 shadow-lg"
-                    />
-                )}
                 <h1 className="text-gray-600 text-lg">Your Email: {user.email}</h1>
             </div>
 
@@ -120,7 +106,6 @@ export default function EditUserForm() {
                             className="w-full p-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
-                    <ImageUpload setImageUrl={setImageUrl} />
                     <button
                         type="submit"
                         className="w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"

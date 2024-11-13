@@ -8,6 +8,7 @@ export default function FavoritedRecipes() {
     const { isAuthenticated, userId } = useAuth();
     const [recipes, setRecipes] = useState([]);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchFavoriteRecipes = async () => {
         try {
@@ -20,6 +21,8 @@ export default function FavoritedRecipes() {
             setRecipes(data);
         } catch (error) {
             setError(error.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -45,6 +48,11 @@ export default function FavoritedRecipes() {
     }, [isAuthenticated, userId]);
 
     return (
+        <>
+        { isLoading ? <div>
+            <p>Loading...</p>
+        </div>
+        :
         <div className="p-2 sm:p-4 w-full max-w-4xl mx-auto">
             {error && <p className="text-red-500">{error}</p>}
             {recipes.length > 0 ? (
@@ -64,7 +72,7 @@ export default function FavoritedRecipes() {
                                 />
                             </div>
 
-                            <div className="flex flex-col sm:flex-1 text-center sm:text-left items-center sm:items-start">
+                            <div className="flex flex-col sm:flex-1 text-center sm:text-left sm:ml-5 items-center sm:items-start">
                                 <h3 className="text-md sm:text-lg font-semibold text-gray-600">{recipe.title}</h3>
                                 <h3 className="text-sm sm:text-base text-gray-600">{recipe.category}</h3>
                             </div>
@@ -81,10 +89,12 @@ export default function FavoritedRecipes() {
                     ))}
                 </ul>
             ) : (
-                <div className="p-4 sm:p-8 items-center justify-center w-full max-w-4xl mx-auto">
+                <div className="p-4 sm:p-8 items-center justify-center w-full max-w-4xl mx-auto text-center">
                     <p>You don&apos;t have any recipes</p>
                 </div>
             )}
         </div>
+    }
+        </>
     );
 }

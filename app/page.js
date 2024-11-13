@@ -6,6 +6,7 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [mostPopularRecipes, setMostPopularRecipes] = useState([]);
   const [otherRecipes, setOtherRecipes] = useState([]);
+  const [isLoding, setIsLoading] = useState(true);
 
   const fetchRecipes = async () => {
     try {
@@ -15,6 +16,8 @@ export default function Home() {
       setOtherRecipes(others);
     } catch (error) {
       setError(error.message);
+    } finally{
+      setIsLoading(false);
     }
   };
 
@@ -43,19 +46,29 @@ export default function Home() {
       <div className="flex items-center justify-center mt-24">
         <h1 className="text-4xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">Most Popular</h1>
       </div>
-      <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 lg:gap-8 mt-8">
+      {isLoding ? 
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 lg:gap-8 mt-8">
+          <p>Loading Recipes...</p>
+        </div>
+        :
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 lg:gap-8 mt-8">
         {mostPopularRecipes.map((recipe) => (
           <RecipeCard key={recipe.id} title={recipe.title} image={recipe.image_url} path={recipe.id} />
         ))}
-      </div>
+      </div>}
       <div className="flex items-center justify-center mt-24">
         <h1 className="text-4xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">Other Recipes</h1>
       </div>
-      <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 lg:gap-8 mt-8">
+      {isLoding ? 
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 lg:gap-8 mt-8">
+          <p>Loading Recipes...</p>
+        </div>
+      :
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 lg:gap-8 mt-8">
         {otherRecipes.map((recipe) => (
           <RecipeCard key={recipe.id} title={recipe.title} image={recipe.image_url} path={recipe.id} />
         ))}
-      </div>
+      </div>}
     </>
   );
 }

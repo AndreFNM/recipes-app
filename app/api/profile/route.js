@@ -32,23 +32,6 @@ async function updateUser(userId, updates) {
   await db.query(`UPDATE users SET ${fields} WHERE id = ?`, [...values, userId]);
 }
 
-async function uploadImageToDocker(imageFile) {
-  const formData = new FormData();
-  formData.append('file', imageFile);
-
-  const response = await fetch('http://docker-service-url/upload', {
-    method: 'POST',
-    body: formData,
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to upload image");
-  }
-
-  const data = await response.json();
-  return data.url;
-}
-
 async function parseFormData(request) {
   const buffers = [];
   for await (const chunk of request.body) {
@@ -63,9 +46,6 @@ async function parseFormData(request) {
   for (const part of parts) {
     if (part.includes('Content-Disposition: form-data; name="name"')) {
       updates.name = part.split("\r\n\r\n")[1].replace("\r\n", "");
-    }
-    if (part.includes('Content-Disposition: form-data; name="image"')) {
-      updates.image = part.split("\r\n\r\n")[1].replace("\r\n", "");
     }
   }
   return updates;
@@ -87,10 +67,6 @@ export async function PATCH(request) {
   try {
     const userId = getUserIdFromToken(request);
     const updates = await parseFormData(request);
-
-    if (updates.image) {
-      updates.image = await uploadImageToDocker(updates.image);
-    }
 
     await updateUser(userId, updates);
     const updatedUser = await getUserById(userId);

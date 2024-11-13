@@ -2,14 +2,12 @@
 import { useState } from 'react';
 
 export default function ImageUpload({ setImageUrl }) {  
-  const [file, setFile] = useState(null);
   const [message, setMessage] = useState('');
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const handleUpload = async () => {
     const formData = new FormData();
     formData.append('file', file);
   
@@ -35,11 +33,8 @@ export default function ImageUpload({ setImageUrl }) {
 
   return (
     <>
-    
         <input type="file" onChange={handleFileChange} />
-        <button onClick={handleUpload}>Upload Image</button>
         <p>{message}</p>
-      
     </>
   );
 }
