@@ -40,6 +40,9 @@ export default function LoginPage() {
     router.push("/auth/register");
   }
   
+  function handleForgotPassword() {
+    router.push("/auth/forgot-password");
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 space-y-5">
@@ -87,6 +90,11 @@ export default function LoginPage() {
                 <p>Do you hava an account?</p> 
                 <button onClick={handleSendRegister} className="bg-sky-600 text-white px-4 rounded-lg hover:bg-sky-700 transition-colors"
                 >Register</button>
+            </div>
+            <div>
+                <button onClick={handleForgotPassword}>
+                <p>Forgot your password?</p> 
+                </button>
             </div>
             </div>
     </>
