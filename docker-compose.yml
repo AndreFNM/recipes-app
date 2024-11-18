@@ -1,0 +1,10 @@
+version: '3'
+services:
+  nextjs-app:
+    build: .
+    ports:
+      - "3000:3000"
+  image-server:
+    build: ./recipe_images_server
+    ports:
+      - "5001:5001"
