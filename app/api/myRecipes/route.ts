@@ -80,7 +80,9 @@ export async function GET(request: Request): Promise<Response> {
         }
       );
     } else {
-      const [recipes] = await db.query<RowDataPacket[]>("SELECT * FROM recipes WHERE user_id=?", [userId]);
+      const [recipes] = await db.query<RowDataPacket[]>(
+        "SELECT * FROM recipes WHERE user_id=?", [userId]
+      );
       return new Response(JSON.stringify(recipes), {
         status: 200,
         headers: { "Content-Type": "application/json" },
@@ -110,7 +112,20 @@ export async function DELETE(request: Request): Promise<Response> {
   }
 
   try {
-    const [result] = await db.query<ResultSetHeader>("DELETE FROM recipes WHERE id=? AND user_id=?", [recipeId, userId]);
+    const [exists] = await db.query<RowDataPacket[]>(
+      "SELECT id FROM recipes WHERE id=? AND user_id=?", [recipeId, userId]
+    );
+    if (exists.length === 0) {
+      return new Response(JSON.stringify({ error: "Recipe not found or unauthorized" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const [result] = await db.query<ResultSetHeader>(
+      "DELETE FROM recipes WHERE id=? AND user_id=?", [recipeId, userId]
+    );
+
     if (result.affectedRows === 0) {
       return new Response(JSON.stringify({ error: "Recipe not found or unauthorized" }), {
         status: 404,

@@ -22,23 +22,32 @@ function verifyToken(token: string, secret: string): JwtPayload {
 
 export async function GET(req: Request): Promise<Response> {
   try {
-    console.log("JWT_SECRET in /api/auth/check:", process.env.JWT_SECRET);
-
     const cookieHeader = req.headers.get("cookie");
-    console.log("Cookie header received in /api/auth/check:", cookieHeader);
-
     const token = extractTokenFromCookie(cookieHeader);
-    console.log("Token extracted from cookie:", token);
 
-    if (!token) {
+    if (!token || typeof token !== "string" || token.trim() === "") {
       return createResponse(
-        { error: "Unauthorized - Token not found" },
+        { error: "Unauthorized - Token not found or invalid" },
         401
       );
     }
 
-    const decoded = verifyToken(token, process.env.JWT_SECRET!);
-    console.log("Token decoded successfully:", decoded);
+    let decoded: JwtPayload;
+    try{
+      decoded = verifyToken(token, process.env.JWT_SECRET);
+    }catch (error){
+      if(error.name === "TokenExpiredError") {
+        return createResponse({error: "Token Expired"}, 401);
+      } else if(error.name === "JsonWebTokenError") {
+        return createResponse({error: "Invalid Token"}, 401);
+      }
+      console.log("Error during token verification: ", error);
+      return createResponse({error: "Interal Server error"},500);
+    }
+
+    if(!decoded || !decoded.id) {
+      return createResponse({error: "Invalid token structure"}, 401);
+    }
 
     return createResponse(
       { authenticated: true, userId: decoded.id },

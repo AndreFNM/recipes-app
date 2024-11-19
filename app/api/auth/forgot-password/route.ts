@@ -1,8 +1,9 @@
 "use server";
 
 import db from "@/lib/db";
-import jwt from "jsonwebtoken";
 import { sendResetPasswordEmail } from "@/lib/mail";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import { RowDataPacket } from "mysql2/promise";
 
 function createResponse(
@@ -17,34 +18,35 @@ export async function POST(req: Request): Promise<Response> {
   try {
     const { email }: { email: string } = await req.json();
 
-    if (!email) {
-      return createResponse({ error: "Email is required" }, 400);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      return createResponse({ error: "Invalid email format" }, 400);
     }
 
-    const [userRows] = await db.query<RowDataPacket[]>(
-      "SELECT * FROM users WHERE email = ?", [email]
-    );
-
+    const [userRows] = await db.query<RowDataPacket[]>("SELECT id FROM users WHERE email = ?", [email.trim()]);
     if (userRows.length === 0) {
-      console.log("Email not found in database.");
-      return createResponse({ error: "Email not found" }, 404);
+      return createResponse({ message: "Check your email for reset instructions." }, 200);
     }
 
     const user = userRows[0];
 
-    const resetToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+    const resetToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, {
+      expiresIn: "1h",
+    });
+    const hashedToken = await bcrypt.hash(resetToken, 12);
 
     const resetTokenExpires = new Date(Date.now() + 3600000);
+
     await db.query(
       "UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE id = ?",
-      [resetToken, resetTokenExpires, user.id]
+      [hashedToken, resetTokenExpires, user.id]
     );
 
-    await sendResetPasswordEmail(email, resetToken);
+    await sendResetPasswordEmail(email.trim(), resetToken);
 
     return createResponse({ message: "Check your email for reset instructions." }, 200);
   } catch (error) {
-    console.error("Detailed error in forgot password route:", error);
+    console.error("Error in forgot password route:", error);
     return createResponse({ error: "Internal Server Error" }, 500);
   }
 }

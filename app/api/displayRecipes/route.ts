@@ -10,7 +10,8 @@ interface Recipe {
 }
 
 async function fetchRecipes(): Promise<Recipe[]> {
-  const [recipes] = await db.query('SELECT id, title, image_url, favorite_count FROM recipes');
+  const query = 'SELECT id, title, image_url, favorite_count FROM recipes';
+  const [recipes] = await db.query(query);
   return recipes as Recipe[];
 }
 

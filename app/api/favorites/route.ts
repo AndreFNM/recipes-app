@@ -112,6 +112,9 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     const decoded = verifyToken(token, process.env.JWT_SECRET!);
+    if (decoded.exp && Date.now() >= decoded.exp * 1000) {
+      throw new Error("Token expired");
+    }
     const userId = decoded.id;
 
     const { recipeId }: { recipeId: number } = await request.json();
@@ -136,6 +139,9 @@ export async function DELETE(request: Request): Promise<Response> {
     }
 
     const decoded = verifyToken(token, process.env.JWT_SECRET!);
+    if (decoded.exp && Date.now() >= decoded.exp * 1000) {
+      throw new Error("Token expired");
+    }
     const userId = decoded.id;
 
     const { recipeId }: { recipeId: number } = await request.json();
@@ -159,15 +165,21 @@ export async function GET(request: Request): Promise<Response> {
   let userId: number;
 try {
   const decoded = verifyToken(token, process.env.JWT_SECRET!);
+  if (decoded.exp && Date.now() >= decoded.exp * 1000) {
+    throw new Error("Token expired");
+  }
   userId = decoded.id;
 } catch (error) {
-  console.error("Error verifying token:", error); // Loga o erro
+  console.error("Error verifying token:", error);
   return createResponse({ error: "Invalid or expired token" }, 403);
 }
 
 
   const { searchParams } = new URL(request.url);
-  const recipeId = searchParams.get("id");
+  const recipeId = Number(searchParams.get("id"));
+  if(isNaN(recipeId)) {
+    return createResponse({error: "Invalid Recipe ID"}, 400);
+  }
 
   try {
     if (recipeId) {

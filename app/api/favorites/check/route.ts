@@ -45,6 +45,9 @@ export async function GET(request: Request): Promise<Response> {
   let userId: number;
   try {
     const decoded = verifyToken(token, process.env.JWT_SECRET!);
+    if (decoded.exp && Date.now() >= decoded.exp * 1000) {
+      throw new Error("Token expired");
+    }
     userId = decoded.id;
   } catch (error) {
     console.error("Error verifying token:", error);

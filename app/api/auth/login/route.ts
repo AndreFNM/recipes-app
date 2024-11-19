@@ -11,20 +11,21 @@ interface User {
   password: string;
 }
 
-function validateInput(
-  email: string,
-  password: string
-): { valid: boolean; error?: string } {
-  if (!email || !email.includes("@") || !password) {
-    return { valid: false, error: "Invalid input" };
+function validateInput(email: string, password: string): { valid: boolean; error?: string } {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRegex.test(email)) {
+    return { valid: false, error: "Invalid email format" };
+  }
+  if (!password || password.length < 8 || password.length > 64) {
+    return { valid: false, error: "Password must be between 8 and 64 characters" };
   }
   return { valid: true };
 }
 
+
 async function findUserByEmail(email: string): Promise<User | null> {
   const [rows] = await db.query<RowDataPacket[]>(
-    "SELECT * FROM users WHERE email = ?",
-    [email]
+    "SELECT id, email, password FROM users WHERE email = ?", [email]
   );
 
   if (rows.length === 0) {

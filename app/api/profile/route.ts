@@ -5,6 +5,13 @@ import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import { RowDataPacket } from "mysql2/promise";
 
+type User = {
+  name: string;
+  email: string;
+};
+
+const allowedFields = ["name", "email"];
+
 function getUserIdFromToken(request: Request): number {
   const cookieHeader = request.headers.get("cookie");
   const token = cookieHeader
@@ -31,12 +38,19 @@ export async function GET(request: Request): Promise<Response> {
       "SELECT name, email FROM users WHERE id = ?", [userId]
     );
 
-    if (rows.length === 0) throw new Error("User not found");
+    if (rows.length === 0) {
+      return NextResponse.json(
+        { error: "User not found" },
+        { status: 404 }
+      );
+    }
 
-    return NextResponse.json(rows[0]);
+    const user = rows[0] as User;
+
+    return NextResponse.json(user);
   } catch (error) {
-    console.error("Error finding user:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Error finding user:", error.message);
+    return NextResponse.json({ error: "An error occurred" }, { status: 500 });
   }
 }
 
@@ -45,20 +59,58 @@ export async function PATCH(request: Request): Promise<Response> {
     const userId = getUserIdFromToken(request);
 
     const formData = await request.formData();
-    const updates = Object.fromEntries(formData.entries());
+    const updates: Record<string, string> = {};
 
-    const fields = Object.keys(updates).map((field) => `${field} = ?`).join(", ");
-    const values = Object.values(updates);
+    formData.forEach((value, key) => {
+      if (typeof value === "string") {
+        updates[key] = value;
+      }
+    });
 
-    await db.query(`UPDATE users SET ${fields} WHERE id = ?`, [...values, userId]);
+    const fieldsToUpdate = Object.keys(updates).filter((key) =>
+      allowedFields.includes(key)
+    );
+
+    if (fieldsToUpdate.length === 0) {
+      return NextResponse.json(
+        { error: "No valid fields provided for update" },
+        { status: 400 }
+      );
+    }
+
+    for (const field of fieldsToUpdate) {
+      if (!updates[field] || typeof updates[field] !== "string") {
+        return NextResponse.json(
+          { error: `Invalid value for field: ${field}` },
+          { status: 400 }
+        );
+      }
+    }
+
+    const fieldsSQL = fieldsToUpdate.map((field) => `${field} = ?`).join(", ");
+    const values = fieldsToUpdate.map((field) => updates[field]);
+
+    await db.query(
+      `UPDATE users SET ${fieldsSQL} WHERE id = ?`, [...values, userId]
+    );
 
     const [updatedUser] = await db.query<RowDataPacket[]>(
       "SELECT name, email FROM users WHERE id = ?", [userId]
     );
 
+    if (updatedUser.length === 0) {
+      return NextResponse.json(
+        { error: "User not found after update" },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json(updatedUser[0]);
   } catch (error) {
-    console.error("Error updating user:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Error updating user:", error.message);
+    return NextResponse.json(
+      { error: "An error occurred while updating the user" },
+      { status: 500 }
+    );
   }
 }
