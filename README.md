@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Project Title and Description    
+    - **CookSpace**
+CookSpace is an interactive web app for anyone interested in cooking, whether you're an experienced chef or a beginner. This platform allows you to explore existing recipes created by others, as well as create your own for other people to see.
 
-## Getting Started
-
-First, run the development server:
-
+## Features
+    **Key Features:**
+    - **Public Access:**
+      - Browse recipes created by other users
+      - Search for other recipes
+      - View details about every recipe including its ingredients and steps
+    - **For Registered Users:**
+      - Create an account or login to have access to new features
+      - Create, edit and delete your own recipes
+      - Favorite other users recipes for quick access
+      - Edit your profile details
+## Installation
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+    - git clone https://github.com/AndreFNM/recipes-app
+    - cd recipes-app
+    - npm install
+    - cd recipe_images_server
+    - npm install
+    - docker build -t <image-name> .
+    - docker run -d -p 5001:5001 --name <container-name> <image-name>
+    ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How to use
+To use this web app you can run the command "npm run dev" after going through the installation process. Then you can open the following link http://localhost:3000 in your browser of choice.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. Technologies
+    This project was built using the following technologies:
+        - React
+        - Typescript
+        - Mysql
+        - Docker 
+        - Playwright
