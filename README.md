@@ -25,10 +25,10 @@ CookSpace is an interactive web app for anyone interested in cooking, whether yo
 ## How to use
 To use this web app you can run the command ```npm run dev``` after going through the installation process. Then you can open the following link http://localhost:3000 in your browser of choice.
 
-5. Technologies
-    This project was built using the following technologies:
-        - React
-        - Typescript
-        - Mysql
-        - Docker 
-        - Playwright
+## Technologies
+This project was built using the following technologies:
+* React
+* Typescript
+* Mysql
+* Docker 
+* Playwright
