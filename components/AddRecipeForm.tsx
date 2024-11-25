@@ -123,10 +123,11 @@ export default function AddRecipeForm(): JSX.Element {
     <div onSubmit={handleSubmit} className="max-w-3xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md space-y-6">
       <h2 className="text-2xl font-semibold text-gray-700">Add a New Recipe</h2>
 
-      <FormField label="Recipe Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-      <FormField label="Description" type="textarea" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
-      <SelectFieldRecipe label="Category:" value={category} onChange={(e) => setCategory(e.target.value)} options={categoryOptions} />
+      <FormField id="recipe-title" label="Recipe Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+      <FormField id="recipe-description" label="Description" type="textarea" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
+      <SelectFieldRecipe id="recipe-category" label="Category:" value={category} onChange={(e) => setCategory(e.target.value)} options={categoryOptions} />
       <FormField
+        id="recipe-servings"
         label="Servings"
         type="number"
         value={servings.toString()}

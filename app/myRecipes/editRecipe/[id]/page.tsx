@@ -1,11 +1,14 @@
 "use client";
 
 import EditRecipeForm from "@/components/EditRecipeForm";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function EditRecipePage(): JSX.Element {
   return (
-    <div className="mt-24">
-      <EditRecipeForm />
-    </div>
+    <ProtectedRoute>
+      <div className="mt-24">
+        <EditRecipeForm />
+      </div>
+    </ProtectedRoute>
   );
 }

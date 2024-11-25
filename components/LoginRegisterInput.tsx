@@ -3,6 +3,7 @@
 import { ChangeEvent } from "react";
 
 interface LoginRegisterInputProps {
+  name: string;
   type: string;
   placeholder: string;
   value: string;
@@ -10,6 +11,7 @@ interface LoginRegisterInputProps {
 }
 
 export default function LoginRegisterInput({
+  name,
   type,
   placeholder,
   value,
@@ -17,6 +19,7 @@ export default function LoginRegisterInput({
 }: LoginRegisterInputProps) {
   return (
     <input
+      name={name}
       type={type}
       placeholder={placeholder}
       value={value}

@@ -9,20 +9,20 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps): JSX.Element | null {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth(); 
   const router = useRouter();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!loading && !isAuthenticated) {
       router.push("/auth/login");
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, loading, router]);
+
+  if (loading) {
+    return <div>Loading...</div>; 
+  }
 
   if (!isAuthenticated) return null;
 
-  return (
-    <>
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

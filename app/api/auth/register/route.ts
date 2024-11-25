@@ -60,7 +60,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     }
 
     if (await userExists(email)) {
-      return createResponse({ error: "Unable to register user." }, 422);
+      return createResponse({ error: "User already exists." }, 422);
     }
 
     await createUser(name, email, password);

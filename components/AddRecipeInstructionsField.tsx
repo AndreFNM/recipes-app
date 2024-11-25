@@ -19,6 +19,7 @@ export default function InstructionsField({
       {instructions.map((instruction, index) => (
         <div key={index} className="flex items-start space-x-2 mb-2">
           <textarea
+            id={`instruction-step-${index}`} 
             placeholder={`Step ${index + 1}`}
             value={instruction}
             onChange={(e) => updateInstruction(index, e.target.value)}

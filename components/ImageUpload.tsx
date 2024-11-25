@@ -38,7 +38,9 @@ export default function ImageUpload({ setImageUrl }: ImageUploadProps): JSX.Elem
 
   return (
     <div>
-      <input type="file" onChange={handleFileChange} />
+      <input 
+       id="recipe-image"
+       type="file" onChange={handleFileChange} />
       <p>{message}</p>
     </div>
   );

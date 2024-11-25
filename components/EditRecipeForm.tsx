@@ -11,7 +11,7 @@ import Image from "next/image";
 
 interface Ingredient {
   name: string;
-  quantity: string;
+  quantity: string; 
   unit: string;
 }
 
@@ -70,6 +70,7 @@ export default function EditRecipeForm(): JSX.Element {
 
   const handleSubmit = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
+
     try {
       const recipeData = createRecipeData();
       await updateRecipe(recipeData);
@@ -81,12 +82,16 @@ export default function EditRecipeForm(): JSX.Element {
   };
 
   const createRecipeData = (): RecipeData => ({
-    title,
-    description,
-    category,
-    servings: servings as number,
-    ingredients,
-    instructions,
+    title: title.trim(),
+    description: description.trim(),
+    category: category.trim(),
+    servings: Number(servings),
+    ingredients: ingredients.map((ingredient) => ({
+      name: ingredient.name.trim(),
+      quantity: ingredient.quantity.trim(),
+      unit: ingredient.unit.trim(),
+    })),
+    instructions: instructions.map((instruction) => instruction.trim()),
     image_url: imageUrl || null,
   });
 
@@ -94,7 +99,13 @@ export default function EditRecipeForm(): JSX.Element {
     const response = await fetch(`/api/myRecipes/${recipeId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(recipeData),
+      body: JSON.stringify({
+        ...recipeData,
+        ingredients: recipeData.ingredients.map((ingredient) => ({
+          ...ingredient,
+          quantity: parseFloat(ingredient.quantity), 
+        })),
+      }),
       credentials: "include",
     });
     if (!response.ok) throw new Error("Failed to update recipe");
@@ -121,10 +132,11 @@ export default function EditRecipeForm(): JSX.Element {
       <h2 className="text-2xl font-semibold text-gray-700">Edit Recipe</h2>
 
       {error && <p className="text-red-500">{error}</p>}
-      <FormField label="Recipe Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-      <FormField label="Description" type="textarea" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
-      <SelectFieldRecipe label="Category:" value={category} onChange={(e) => setCategory(e.target.value)} options={categoryOptions} />
+      <FormField id="recipe-title" label="Recipe Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+      <FormField id="recipe-description" label="Description" type="textarea" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
+      <SelectFieldRecipe id="recipe-category" label="Category:" value={category} onChange={(e) => setCategory(e.target.value)} options={categoryOptions} />
       <FormField
+        id="recipe-servings"
         label="Servings"
         type="number"
         value={servings.toString()}

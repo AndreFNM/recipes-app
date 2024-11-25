@@ -25,6 +25,7 @@ interface Ingredient {
         {ingredients.map((ingredient, index) => (
           <div key={index} className="flex space-x-2 mb-2">
             <input
+              id={`ingredient-name-${index}`}
               type="text"
               placeholder="Name"
               value={ingredient.name}
@@ -33,6 +34,7 @@ interface Ingredient {
               className="flex-1 p-2 border rounded-md"
             />
             <input
+              id={`ingredient-quantity-${index}`}
               type="text"
               placeholder="Quantity"
               value={ingredient.quantity}
@@ -41,6 +43,7 @@ interface Ingredient {
               className="w-1/4 p-2 border rounded-md"
             />
             <input
+              id={`ingredient-unit-${index}`}
               type="text"
               placeholder="Unit"
               value={ingredient.unit}

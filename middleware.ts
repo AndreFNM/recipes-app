@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { LRUCache } from "lru-cache";
 
+const maxRequestsPerIP = 100;
+const ttl = 1 * 60 * 1000; 
+
 const rateLimiter = new LRUCache<string, number>({
-  max: 100,
-  ttl: 15 * 60 * 1000, 
+  max: 5000,
+  ttl,
 });
 
 function getIp(request: NextRequest): string {
@@ -16,7 +19,8 @@ export function middleware(request: NextRequest) {
 
   const requestCount = rateLimiter.get(ip) || 0;
 
-  if (requestCount >= rateLimiter.max) {
+  if (requestCount >= maxRequestsPerIP) {
+    console.log(`Rate limit exceeded for IP: ${ip}`);
     return NextResponse.json(
       { error: "Too many requests, please try again later." },
       { status: 429 }
@@ -25,6 +29,7 @@ export function middleware(request: NextRequest) {
 
   rateLimiter.set(ip, requestCount + 1);
 
+  console.log(`IP: ${ip}, Requests: ${requestCount + 1}`);
   return NextResponse.next();
 }
 

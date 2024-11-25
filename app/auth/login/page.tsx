@@ -69,6 +69,7 @@ export default function LoginPage() {
                   <p className="text-red-500 text-sm text-center">{error}</p>
                 )}
                 <LoginRegisterInput
+                  name="email"
                   type="email"
                   placeholder="Email"
                   value={email}
@@ -76,6 +77,7 @@ export default function LoginPage() {
                 />
 
                 <LoginRegisterInput
+                  name="password"
                   type="password"
                   placeholder="Password"
                   value={password}

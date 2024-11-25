@@ -2,6 +2,7 @@
 
 interface SelectFieldRecipeProps {
   label: string;
+  id: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   options: string[];
@@ -9,14 +10,18 @@ interface SelectFieldRecipeProps {
 
 export default function SelectFieldRecipe({
   label,
+  id,
   value,
   onChange,
   options,
 }: SelectFieldRecipeProps): JSX.Element {
   return (
     <div className="mt-5">
-      <label>{label}</label>
+      <label 
+      htmlFor={id}
+       >{label}</label>
       <select
+        id={id}
         value={value}
         onChange={onChange}
         className="w-full p-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
