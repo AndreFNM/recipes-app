@@ -26,7 +26,7 @@ test("Creating a new recipe with image upload", async ({ page }) => {
   await page.click('button:text("Add Step")');
   await page.fill("#instruction-step-1", "Cook for 10 minutes.");
 
-  const filePath = path.resolve(__dirname, "donkeykong.jpg");
+  const filePath = path.resolve(__dirname, "image-arroz-de-pato.jpeg");
   await page.setInputFiles("#recipe-image", filePath);
 
   await page.waitForSelector('text=Successful upload');

@@ -15,12 +15,12 @@ test("Edit recipe image", async ({ page }) => {
   await page.click('button:text("Edit Recipe")');
   await expect(page).toHaveURL(/\/myRecipes\/editRecipe\/\d+/);
 
-  const filePath = path.resolve(__dirname, "rand.jpg");
+  const filePath = path.resolve(__dirname, "caldo-verde-imagem.jpg");
   await page.setInputFiles("#recipe-image", filePath);
 
   await page.click('button:text("Update Recipe")');
 
   await expect(page).toHaveURL("/myRecipes");
 
-  await page.waitForSelector('img[src*="rand.jpg"]'); 
+  await page.waitForSelector('img[src*="caldo-verde-imagem.jpg"]'); 
 });

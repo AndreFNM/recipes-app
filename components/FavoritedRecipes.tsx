@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface Recipe {
   recipe_id: number;
   title: string;
   category: string;
   image_url: string;
+  path: number;
 }
 
 export default function FavoritedRecipes(): JSX.Element {
@@ -16,6 +18,7 @@ export default function FavoritedRecipes(): JSX.Element {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const router = useRouter();
 
   const fetchFavoriteRecipes = async (): Promise<void> => {
     try {
@@ -72,20 +75,23 @@ export default function FavoritedRecipes(): JSX.Element {
                   key={recipe.recipe_id}
                   className="flex flex-col sm:flex-row items-center p-4 bg-gray-300 text-white rounded-lg shadow-lg mb-4 w-full max-w-md sm:max-w-full transform hover:scale-105 transition-transform duration-300 ease-in-out"
                 >
-                  <div className="w-32 h-32 sm:w-20 sm:h-20 mb-4 sm:mb-0 relative">
-                    <Image
-                      src={recipe.image_url}
-                      alt="Recipe"
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded-lg"
-                    />
-                  </div>
-
+                  <button onClick={() => router.push(`/recipeDetails/${recipe.recipe_id}`)}>
+                    <div className="w-32 h-32 sm:w-20 sm:h-20 mb-4 sm:mb-0 relative">
+                      <Image
+                        src={recipe.image_url}
+                        alt="Recipe"
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-lg"
+                      />
+                    </div>
+                  </button>
                   <div className="flex flex-col sm:flex-1 text-center sm:text-left sm:ml-5 items-center sm:items-start">
+                    <button onClick={() => router.push(`/recipeDetails/${recipe.recipe_id}`)}>
                     <h3 className="text-md sm:text-lg font-semibold text-gray-600">
                       {recipe.title}
                     </h3>
+                    </button>
                     <h3 className="text-sm sm:text-base text-gray-600">
                       {recipe.category}
                     </h3>
