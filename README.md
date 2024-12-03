@@ -29,6 +29,8 @@ To use this web app you can run the command ```npm run dev``` after going throug
 This project was built using the following technologies:
 * React
 * Typescript
+* Next.Js
+* Tailwind CSS
 * Mysql
 * Docker 
 * Playwright
