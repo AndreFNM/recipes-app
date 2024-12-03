@@ -36,7 +36,7 @@ function MainNavigation() {
     <header className="bg-white bg-opacity-70 backdrop-blur-md shadow-md fixed w-full top-0 z-10">
       <nav className="max-w-7xl mx-auto p-4 flex justify-between items-center">
         <div className="text-2xl font-bold text-gray-800">
-          <Link href="/">Recipes App</Link>
+          <Link href="/">CookSpace</Link>
         </div>
         <ul className="hidden md:flex space-x-8 text-lg">
           <li>
