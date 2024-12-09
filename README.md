@@ -13,6 +13,11 @@ CookSpace is an interactive web app for anyone interested in cooking, whether yo
     * Favorite other users recipes for quick access
     * Edit your profile details
 ## Installation
+*Pre-Requisites
+   * Node.js
+   * Docker
+   * MySQL
+     
     $ git clone https://github.com/AndreFNM/recipes-app
     $ cd recipes-app
     $ npm install
@@ -23,6 +28,7 @@ CookSpace is an interactive web app for anyone interested in cooking, whether yo
 
 
 ## How to use
+Before running this web app, you need to set up the database using init.sql file and create your own .env file with your credentials.
 To use this web app you can run the command ```npm run dev``` after going through the installation process. Then you can open the following link http://localhost:3000 in your browser of choice.
 
 ## Technologies
