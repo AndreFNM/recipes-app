@@ -1,6 +1,9 @@
 ## CookSpace 
 CookSpace is an interactive web app for anyone interested in cooking, whether you're an experienced chef or a beginner. This platform allows you to explore existing recipes created by others, as well as create your own for other people to see.
 
+## Demo 🎥
+![CookSpace Demo](assets/CookSpaceGif.gif)
+
 ## Features
 * Key Features:
   * Public Access:
