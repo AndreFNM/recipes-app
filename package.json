@@ -10,6 +10,9 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@playwright/test": "^1.49.0",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",

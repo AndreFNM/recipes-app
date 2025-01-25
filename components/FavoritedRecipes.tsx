@@ -73,7 +73,7 @@ export default function FavoritedRecipes(): JSX.Element {
               {recipes.map((recipe) => (
                 <li
                   key={recipe.recipe_id}
-                  className="flex flex-col sm:flex-row items-center p-4 bg-gray-300 text-white rounded-lg shadow-lg mb-4 w-full max-w-md sm:max-w-full transform hover:scale-105 transition-transform duration-300 ease-in-out"
+                  className="flex flex-col sm:flex-row items-center p-4 bg-gray-300 dark:bg-gray-800 text-gray-800 dark:text-gray-300 rounded-lg shadow-lg mb-4 w-full max-w-md sm:max-w-full transform hover:scale-105 transition-transform duration-300 ease-in-out"
                 >
                   <button onClick={() => router.push(`/recipeDetails/${recipe.recipe_id}`)}>
                     <div className="w-32 h-32 sm:w-20 sm:h-20 mb-4 sm:mb-0 relative">
@@ -88,11 +88,11 @@ export default function FavoritedRecipes(): JSX.Element {
                   </button>
                   <div className="flex flex-col sm:flex-1 text-center sm:text-left sm:ml-5 items-center sm:items-start">
                     <button onClick={() => router.push(`/recipeDetails/${recipe.recipe_id}`)}>
-                    <h3 className="text-md sm:text-lg font-semibold text-gray-600">
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
                       {recipe.title}
                     </h3>
                     </button>
-                    <h3 className="text-sm sm:text-base text-gray-600">
+                    <h3 className="text-sm text-gray-600 dark:text-gray-200">
                       {recipe.category}
                     </h3>
                   </div>
@@ -100,7 +100,7 @@ export default function FavoritedRecipes(): JSX.Element {
                   <div className="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0 items-center">
                     <button
                       onClick={() => removeFavoriteRecipe(recipe.recipe_id)}
-                      className="px-4 py-2 bg-blue-400 text-white rounded-md hover:bg-blue-600 w-full sm:w-auto"
+                      className="px-4 py-2 bg-blue-500 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-800 text-white rounded-md"
                     >
                       Remove from Favorites
                     </button>

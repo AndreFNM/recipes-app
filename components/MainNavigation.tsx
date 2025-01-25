@@ -5,6 +5,7 @@ import { useState, ChangeEvent, KeyboardEvent } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import LogoutButton from "./LogoutButton";
 import { useRouter } from "next/navigation";
+import ThemeToggle from "@/contexts/ThemeToggle";
 
 function MainNavigation() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -86,6 +87,7 @@ function MainNavigation() {
               className="w-[150px] borderless border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </li>
+          <ThemeToggle/>
           {!isAuthenticated ? (
             <li>
               <Link href="/auth/login">Authentication</Link>

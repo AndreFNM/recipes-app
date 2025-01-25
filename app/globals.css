@@ -2,6 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: #ffffff;
+  --foreground: #333333;
+  --card-bg: #d1d5db;
+  --card-text: #333333;
+  --button-bg: #60a5fa;
+  --button-text: #ffffff;
+}
+
+.dark {
+  --background: #121212;
+  --foreground: #E0E0E0;
+  --card-bg: #333333;
+  --card-text: #E0E0E0;
+  --button-bg: #374151;
+  --button-hover-bg: #4B5563;
+}
+
+header {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.dark header {
+  background-color: #1F2937;
+  color: #CBD5E1;
+}
+
+nav a, nav svg {
+  color: var(--foreground);
+}
+
+nav a:hover, nav a:focus {
+  color: #4B5563;
+}
+
+.dark nav a, .dark nav svg {
+  color: #CBD5E1;
+}
+
+.dark nav a:hover, .dark nav a:focus {
+  color: #4B5563;
+}
+
+input[type="text"] {
+  background-color: var(--card-bg);
+  color: var(--foreground);
+}
+
+.dark input[type="text"] {
+  background-color: #333333;
+  color: #E0E0E0;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
 }
