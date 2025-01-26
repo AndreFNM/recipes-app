@@ -56,6 +56,79 @@ input[type="text"] {
   color: #E0E0E0;
 }
 
+.login-container {
+  background-color: #d1d5db;
+  color: #333333; 
+}
+
+
+.dark .login-container {
+  background-color: #1E1E1E; 
+  color: #EAEAEA;
+  border: 1px solid #333; 
+}
+
+.dark .login-container input {
+  background-color: #252525;
+  color: #EAEAEA; 
+  border: 1px solid #555;
+}
+
+.dark .login-container button {
+  background-color: #333333; 
+  color: #FFFFFF; 
+  border: 1px solid #444; 
+}
+
+.dark .login-container button:hover {
+  background-color: #444444; 
+}
+
+.dark .login-container a {
+  color: #60A5FA; 
+}
+
+.dark .login-container a:hover {
+  color: #90CDF4; 
+}
+
+
+.register-container {
+  background-color: #d1d5db; 
+  color: #333333; 
+}
+
+.dark .register-container {
+  background-color: #1E1E1E; 
+  color: #EAEAEA; 
+  border: 1px solid #333; 
+}
+
+.dark .register-container input {
+  background-color: #252525; 
+  color: #EAEAEA; 
+  border: 1px solid #555;
+}
+
+.dark .register-container button {
+  background-color: #333333; 
+  color: #FFFFFF; 
+  border: 1px solid #444; 
+}
+
+.dark .register-container button:hover {
+  background-color: #444444; 
+}
+
+.dark .register-container a {
+  color: #60A5FA; 
+}
+
+.dark .register-container a:hover {
+  color: #90CDF4; 
+}
+
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: var(--background);

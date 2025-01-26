@@ -55,10 +55,11 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 space-y-5">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-900 dark:bg-[var(--background)] dark:text-[var(--foreground)]">
       <h1 className="text-3xl font-bold">Welcome!</h1>
 
-      <div className="bg-gray-300 p-8 rounded-lg shadow-lg max-w-md w-full space-y-5">
+      {/* Container with light and dark mode styling */}
+      <div className="register-container p-8 rounded-lg shadow-lg max-w-md w-full space-y-5">
         <h1 className="text-3xl font-semibold text-center mb-6">Register</h1>
 
         {isAuthenticated ? (
@@ -97,7 +98,7 @@ export default function RegisterPage() {
                 />
                 <button
                   type="submit"
-                  className="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700"
+                  className="w-full px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 dark:bg-[var(--button-bg)] dark:text-[var(--button-text)] dark:hover:bg-[var(--button-hover-bg)] transition-colors"
                 >
                   Register
                 </button>
@@ -109,7 +110,7 @@ export default function RegisterPage() {
                 <p>Do you have an account?</p>
                 <button
                   onClick={handleSendLogin}
-                  className="bg-sky-600 text-white px-4 rounded-lg hover:bg-sky-700 transition-colors"
+                  className="w-full px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 dark:bg-[var(--button-bg)] dark:text-[var(--button-text)] dark:hover:bg-[var(--button-hover-bg)] transition-colors"
                 >
                   Login
                 </button>

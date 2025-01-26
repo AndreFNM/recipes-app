@@ -51,10 +51,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 space-y-5">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-900 dark:bg-[var(--background)] dark:text-[var(--foreground)]">
       <h1 className="text-3xl font-bold">Welcome Back!</h1>
 
-      <div className="bg-gray-300 p-8 rounded-lg shadow-lg max-w-md w-full space-y-5">
+      {/* Mantém o cinzento no light mode e usa dark mode apenas no contexto adequado */}
+      <div className="login-container p-8 rounded-lg shadow-lg max-w-md w-full space-y-5">
         <h1 className="text-3xl font-semibold text-center mb-6">Login</h1>
 
         {isAuthenticated ? (
@@ -85,7 +86,7 @@ export default function LoginPage() {
                 />
                 <button
                   type="submit"
-                  className="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700"
+                  className="w-full px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 dark:bg-[var(--button-bg)] dark:text-[var(--button-text)] dark:hover:bg-[var(--button-hover-bg)] transition-colors"
                 >
                   Login
                 </button>
@@ -96,14 +97,16 @@ export default function LoginPage() {
                 <p>Do you have an account?</p>
                 <button
                   onClick={handleSendRegister}
-                  className="bg-sky-600 text-white px-4 rounded-lg hover:bg-sky-700 transition-colors"
+                  className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 dark:bg-[var(--button-bg)] dark:text-[var(--button-text)] dark:hover:bg-[var(--button-hover-bg)] transition-colors"
                 >
                   Register
                 </button>
               </div>
               <div>
                 <button onClick={handleForgotPassword}>
-                  <p>Forgot your password?</p>
+                  <p className="text-blue-600 hover:text-blue-700 dark:text-[var(--foreground)] dark:hover:text-[var(--button-hover-bg)]">
+                    Forgot your password?
+                  </p>
                 </button>
               </div>
             </div>
