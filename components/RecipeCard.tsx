@@ -1,14 +1,16 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 interface RecipeCardProps {
   title: string;
   image: string;
   path: number;
+  index?: number; 
 }
 
-export default function RecipeCard({ title, image, path }: RecipeCardProps): JSX.Element {
+export default function RecipeCard({ title, image, path, index }: RecipeCardProps): JSX.Element {
   const router = useRouter();
 
   const handleBtn = (): void => {
@@ -16,8 +18,13 @@ export default function RecipeCard({ title, image, path }: RecipeCardProps): JSX
   };
 
   return (
-    <div className="w-full sm:w-1/4 md:w-1/5 lg:w-1/6 p-2 transform hover:scale-105 transition-transform duration-300 ease-in-out">
-      <div className="rounded overflow-hidden shadow-lg bg-[var(--card-bg)] h-full flex flex-col">
+    <motion.div
+      className="w-full sm:w-1/4 md:w-1/5 lg:w-1/6 p-2"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index ? index * 0.1 : 0 }} 
+    >
+      <div className="rounded overflow-hidden shadow-lg bg-[var(--card-bg)] h-full flex flex-col transform hover:scale-105 transition-transform duration-300 ease-in-out">
         <div className="w-full h-40 relative">
           <Image
             src={image}
@@ -39,6 +46,6 @@ export default function RecipeCard({ title, image, path }: RecipeCardProps): JSX
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
