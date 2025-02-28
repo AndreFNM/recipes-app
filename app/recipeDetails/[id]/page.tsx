@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
-import {use} from 'react';
+import { use } from "react";
+import CommentsList from "@/components/CommentsList"; 
+import AddComment from "@/components/AddComment";
 
 type Recipe = {
   id: number;
@@ -31,8 +33,8 @@ type RecipeDetailsProps = {
 };
 
 export default function RecipeDetails({ params }: RecipeDetailsProps) {
-  const resolvedParams = use(params); 
-  const { id } = resolvedParams;
+  const resolvedParams = use(params);
+  const recipeId = Number(resolvedParams.id); 
 
   const { isAuthenticated } = useAuth();
   const router = useRouter();
@@ -40,11 +42,12 @@ export default function RecipeDetails({ params }: RecipeDetailsProps) {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isFavorited, setIsFavorited] = useState<boolean>(false);
+  const [refreshComments, setRefreshComments] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchRecipeDetails = async () => {
       try {
-        const response = await fetch(`/api/recipeDetails/${id}`);
+        const response = await fetch(`/api/recipeDetails/${recipeId}`);
         if (!response.ok) throw new Error("Error loading recipe details");
         const data: Recipe = await response.json();
         setRecipe(data);
@@ -60,7 +63,7 @@ export default function RecipeDetails({ params }: RecipeDetailsProps) {
     const checkIfFavorited = async () => {
       if (!isAuthenticated) return;
       try {
-        const response = await fetch(`/api/favorites/check?recipeId=${id}`, {
+        const response = await fetch(`/api/favorites/check?recipeId=${recipeId}`, {
           credentials: "include",
         });
         if (response.ok) {
@@ -74,7 +77,7 @@ export default function RecipeDetails({ params }: RecipeDetailsProps) {
 
     fetchRecipeDetails();
     checkIfFavorited();
-  }, [id, isAuthenticated]);
+  }, [recipeId, isAuthenticated]);
 
   const toggleFavorite = async () => {
     if (!isAuthenticated) {
@@ -89,7 +92,7 @@ export default function RecipeDetails({ params }: RecipeDetailsProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ recipeId: id }),
+        body: JSON.stringify({ recipeId }),
       });
 
       if (!response.ok)
@@ -143,15 +146,12 @@ export default function RecipeDetails({ params }: RecipeDetailsProps) {
           <strong className="text-gray-800">Servings:</strong> {recipe.servings}
         </p>
         <p className="text-lg">
-          <strong className="text-gray-800">Description:</strong>{" "}
-          {recipe.description}
+          <strong className="text-gray-800">Description:</strong> {recipe.description}
         </p>
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-          Ingredients
-        </h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Ingredients</h2>
         <ul className="list-disc list-inside space-y-2 text-gray-700">
           {recipe.ingredients.map((ingredient, index) => (
             <li key={index} className="pl-1 text-lg">
@@ -165,9 +165,7 @@ export default function RecipeDetails({ params }: RecipeDetailsProps) {
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-          Instructions
-        </h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Instructions</h2>
         <ol className="list-decimal list-inside space-y-3 text-gray-700">
           {recipe.instructions.map((instruction, index) => (
             <li key={index} className="pl-1 text-lg">
@@ -176,6 +174,12 @@ export default function RecipeDetails({ params }: RecipeDetailsProps) {
           ))}
         </ol>
       </div>
+      {
+        isAuthenticated ? <AddComment recipeId={recipeId} onCommentAdded={() => setRefreshComments(!refreshComments)} /> :
+        <></>
+      }
+
+      <CommentsList recipeId={recipeId} />
     </div>
   );
 }
